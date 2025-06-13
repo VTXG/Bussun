@@ -39,3 +39,5 @@ Kamek
 *.pyc
 *.bin
 .*.swp
+
+!/examples/.vscode
