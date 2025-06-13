@@ -17,10 +17,10 @@ namespace {
 
         return pFunc;
     }
-
-    extern kmSymbol getCreator__14NameObjFactoryFPCc;
-    extern kmSymbol getMountObjectArchiveList__14NameObjFactoryFP27NameObjArchiveListCollectorPCcRC12JMapInfoIter;
-
-    kmCall(&getCreator__14NameObjFactoryFPCc + 0x34, getName2CreateFuncExt);
-    kmCall(&getMountObjectArchiveList__14NameObjFactoryFP27NameObjArchiveListCollectorPCcRC12JMapInfoIter + 0x4C, getName2CreateFuncExt);
 }
+
+extern kmSymbol getCreator__14NameObjFactoryFPCc;
+extern kmSymbol getMountObjectArchiveList__14NameObjFactoryFP27NameObjArchiveListCollectorPCcRC12JMapInfoIter;
+
+kmCall(&getCreator__14NameObjFactoryFPCc + 0x34, getName2CreateFuncExt);
+kmCall(&getMountObjectArchiveList__14NameObjFactoryFP27NameObjArchiveListCollectorPCcRC12JMapInfoIter + 0x4C, getName2CreateFuncExt);

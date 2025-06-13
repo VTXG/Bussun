@@ -20,9 +20,10 @@ namespace {
     void loop() {
 
     }
-
-    extern kmSymbol initAfterStationedResourceLoaded__10GameSystemFv;
-    extern kmSymbol frameLoop__10GameSystemFv;
-    kmBranch(&initAfterStationedResourceLoaded__10GameSystemFv + 0x5C, init);
-    kmBranch(&frameLoop__10GameSystemFv + 0x64, loop);
 }
+
+extern kmSymbol initAfterStationedResourceLoaded__10GameSystemFv;
+extern kmSymbol frameLoop__10GameSystemFv;
+
+kmBranch(&initAfterStationedResourceLoaded__10GameSystemFv + 0x5C, init);
+kmBranch(&frameLoop__10GameSystemFv + 0x64, loop);
