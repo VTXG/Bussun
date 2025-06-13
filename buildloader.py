@@ -4,11 +4,9 @@ import subprocess
 import sys
 from pathlib import Path
 
-
 def err(message: str):
     print(f"Error: {message}")
     sys.exit(1)
-
 
 def dep(path, name):
     path = Path(path)
@@ -16,19 +14,17 @@ def dep(path, name):
         err(f"{name} not found!")
     return path
 
-
 def prepare_bin():
     if os.path.exists("bin"):
         shutil.rmtree("bin")
     os.makedirs("bin")
-
 
 REGIONS = ["PAL", "USA", "JPN", "TWN", "KOR"]
 LETTERS = ['P', 'E', 'J', 'W', 'K']
 
 MWCCEPPC = dep("deps/CodeWarrior/mwcceppc.exe", "CodeWarrior compiler")
 KAMEK = dep("deps/Kamek/Kamek.exe", "Kamek linker")
-PETARI = dep("../Petari", "Petari for Bussun")
+PETARI = dep([YourPetariFolder], "Petari")
 SYMBOLS = dep("symbols", "Symbols folder")
 
 def getregionletter(region: str):
@@ -45,9 +41,6 @@ def build(region: str, outputPath: str, buildFullXML: bool):
     facelib_path = f"{PETARI}/libs/RVLFaceLib/include"
     jsystem_path = f"{PETARI}/libs/JSystem/include"
     nw4r_path = f"{PETARI}/libs/nw4r/include"
-#    compile_cmd = f"{MWCCEPPC} -c -Cpp_exceptions off -nodefaults -proc gekko -fp hard -lang=c++ -O4,s -inline on " \
-#                  f"-rtti off -sdata 0 -sdata2 0 -align powerpc -func_align 4 -str pool -enum int -DGEKKO " \
-#                  f"-i include -I- -i loader -D{region} loader/loader.cpp -o loader/loader.o"
 
     compile_cmd = f"{MWCCEPPC} -c -Cpp_exceptions off -nodefaults -proc gekko -fp hard -lang=c++ -O4,s -inline on " \
                   f"-rtti off -sdata 0 -sdata2 0 -align powerpc -func_align 4 -str pool -enum int -DGEKKO " \
@@ -76,23 +69,23 @@ def build(region: str, outputPath: str, buildFullXML: bool):
         fullXMLBody = f"""<wiidisc version="1">
 	<id game="RMG{getregionletter(region)}" />
 	<options>
-		<section name="Syati Loader">
+		<section name="Bussun Loader">
 			<option name="Super Mario Galaxy">
 				<choice name="Enabled">
-					<patch id="syati" />
+					<patch id="bussun" />
 				</choice>
 			</option>
 		</section>
 	</options>
-	<patch id="syati">
+	<patch id="bussun" root="/Game">
+        <!-- Bussun Loader -->
+        <folder external="CustomCode" disc="/CustomCode" create="true"/>
 		{loaderPatches}
-		<file disc="/CustomCode/CustomCode_USA.bin" external="CustomCode_USA.bin" create="true" />
 	</patch>
 </wiidisc>"""
         open(f"{outputPath}/riivo_{region}.xml", "w").write(fullXMLBody)
 
     print("Done!")
-
 
 if __name__ == '__main__':
     isNextArgOutput = False

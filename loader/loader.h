@@ -31,10 +31,10 @@ namespace {
         u32 unk[2];
     };
 
-    void SyatiInit();
-    void SyatiLink(u8 *linkedBuffer, u32 linkedSize, u8 *kamekBuffer, u32 kamekSize);
+    void BussunInit();
+    void BussunLink(u8 *linkedBuffer, u32 linkedSize, u8 *kamekBuffer, u32 kamekSize);
 
-    void SyatiError(const char *msg);
+    void BussunError(const char *msg);
 };
 
 

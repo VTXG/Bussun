@@ -4,9 +4,6 @@
 // allow Kamek hooks to be defined from C++ source files
 #pragma section RX ".kamek"
 
-// bad approach, but whatever
-#define __COUNTER__ __LINE__
-
 // hook type IDs _must_ match what's in the Kamek source!
 #define kctWrite 1
 #define kctConditionalWrite 2
@@ -20,10 +17,10 @@ typedef const unsigned char kmSymbol;
 	_k##key##counter
 #define kmHookInt(counter) \
 	__declspec (section ".kamek") __declspec(force_export) static const u32 kmIdentifier(Hook, counter) 
-	
 
 // general hook definition macros
 // TODO: debugging data (file, line, ...) for diagnostic use by Kamek maybe? :3
+#ifndef INTELLISENSE_FIX // If added to c_cpp_properties.json, makes it so intellisense ignores kamek hooks. Usefull since intellisense does not think this is valid syntax.
 #define kmHook0(type) \
 	kmHookInt(__COUNTER__)[2] = { 0, (type) }
 #define kmHook1(type, arg0) \
@@ -34,6 +31,13 @@ typedef const unsigned char kmSymbol;
 	kmHookInt(__COUNTER__)[5] = { 3, (type), (u32)(arg0), (u32)(arg1), (u32)(arg2) }
 #define kmHook4(type, arg0, arg1, arg2, arg3) \
 	kmHookInt(__COUNTER__)[6] = { 4, (type), (u32)(arg0), (u32)(arg1), (u32)(arg2), (u32)(arg3) }
+#else
+#define kmHook0(type) 
+#define kmHook1(type, arg0) 
+#define kmHook2(type, arg0, arg1) 
+#define kmHook3(type, arg0, arg1, arg2) 
+#define kmHook4(type, arg0, arg1, arg2, arg3) 
+#endif
 
 // kmCondWrite
 //   Write value to address, conditionally

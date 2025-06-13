@@ -1,11 +1,9 @@
 #include "loader.h"
 #include "kamek/hooks.h"
 #include <revolution/dvd.h>
-#include <Game/System/HeapMemoryWatcher.hpp>
 #include <revolution/os.h>
+#include <Game/System/HeapMemoryWatcher.hpp>
 #include <Game/SingletonHolder.hpp>
-
-//extern HeapMemoryWatcher *gHMW;
 
 /*
 * ORIGINAL COMMENT:
@@ -18,14 +16,8 @@
 * system heap is sufficently large to fit all custom code and will not dynamically resize.
 */
 
-extern "C" {
-    s32 DVDReadPrio(DVDFileInfo* fileInfo, void* addr, s32 length, s32 offset, s32 prio);
-}
-
 namespace {
-	/*****************************************************************************************************************/
-	/* Enable crash debugger                                                                                         */
-	/*****************************************************************************************************************/
+	// ----- Enable crash debugger ----- //
 #if defined(KOR)
 	kmWrite32(0x8039BF80, 0x60000000);
 	kmWrite32(0x8039C044, 0x60000000);
@@ -38,10 +30,7 @@ namespace {
 	kmWrite32(0x804A432C, 0x60000000);
 #endif
 
-
-	/*****************************************************************************************************************/
-	/* Get size of CustomCode and expand SystemHeap if necessary                                                     */
-	/*****************************************************************************************************************/
+	// ----- Get size of CustomCode and expand SystemHeap if necessary ----- //
 	static u32 sCustomCodeSize;
 
 	void initCustomCodeSize() {
@@ -54,20 +43,20 @@ namespace {
 		}
 
 		if (!DVDFastOpen(pathID, &fileHandle)) {
-			SyatiError("SYA_ERR\n\nCan't create file handle\n");
+			BussunError("SYA_ERR\n\nCan't create file handle\n");
 		}
 
 		if (fileHandle.length < 32) {
-			SyatiError("SYA_ERR\n\nBinary too small\n");
+			BussunError("SYA_ERR\n\nBinary too small\n");
 		}
 
 		u8 tempBuffer[ALIGN_32(sizeof(KamekHeader)) * 2];
-		KamekHeader *header = (KamekHeader*)ALIGN_32((u32)tempBuffer);
+		KamekHeader *pHeader = (KamekHeader*)ALIGN_32((u32)tempBuffer);
 
-		DVDReadPrio(&fileHandle, header, 32, 0, 2);
+		DVDReadPrio(&fileHandle, pHeader, 32, 0, 2);
 		DVDClose(&fileHandle);
 
-		sCustomCodeSize = ALIGN_32(header->codeSize + header->bssSize);
+		sCustomCodeSize = ALIGN_32(pHeader->codeSize + pHeader->bssSize);
 	}
 
 	void getCustomCodeSizeAndCreateHeaps(HeapMemoryWatcher *heapWatcher) {
@@ -82,9 +71,7 @@ namespace {
 #endif
 
 /*
-	// ----------------------------------------------------------------------------------------------------------------
-	// Create SystemHeap with adjusted size
-
+	// ----- Create SystemHeap with adjusted size ----- //
 	JKRHeap* createSystemHeap(u32 size, JKRHeap *root, bool allocArg) {
 		if (sCustomCodeSize > 81920) {
 			size += (sCustomCodeSize - 81920);
@@ -99,10 +86,7 @@ namespace {
 	kmCall(0x8039EDF0, createSystemHeap);
 #endif
 
-
-	// ----------------------------------------------------------------------------------------------------------------
-	// Get proper size for StationedHeapNapa
-
+	// ----- Get proper size for StationedHeapNapa ----- //
 	u32 getStationedHeapNapaSize(JKRHeap *pHeap, int allocArg) {
 		u32 allocatableSize = pHeap->getMaxAllocatableSize(allocArg);
 
@@ -125,80 +109,57 @@ namespace {
 #endif
 */
 
-	/*****************************************************************************************************************/
-	/* Load and link code from CustomCode binary                                                                     */
-	/*****************************************************************************************************************/
-#if defined(KOR)
-	kmBranch(0x8039BF44, SyatiInit);
-#elif defined(USA)
-	kmBranch(0x8039A9F0, SyatiInit);
-#endif
-
-	void SyatiInit() {
-
+	// ----- Load and link code from CustomCode binary ----- //
+	void BussunInit() {
 		if (sCustomCodeSize == 0) {
 			return;
 		}
 
-		OSReport("SYATI_INIT\n");
+		OSReport("BUSSUN_INIT\n");
 
-
-		// ------------------------------------------------------------------------------------------------------------
-		// Create handle & check file
-
+		// Create handle and check file
 		DVDFileInfo fileHandle;
 		int pathID = DVDConvertPathToEntrynum(KAMEK_BINARY_NAME);
 
 		if (!DVDFastOpen(pathID, &fileHandle)) {
-			SyatiError("SYA_ERR\n\nCan't create file handle\n");
+			BussunError("BSN_ERR\n\nCan't create file handle\n");
 		}
 
-
-
-		// ------------------------------------------------------------------------------------------------------------
 		// Read temporary binary file and close handle
-
 		// This is... questionable. Allocating memory on a heap and freeing it later on doesn't seem to work properly
 		// on console. However, GameHeapNapa gets destroyed very often, so this is actually very reliable.
-		u8* binary = (u8*)ALIGN_32((u32)SingletonHolder<HeapMemoryWatcher>::sInstance->mGameHeapNapa + 0x200);
+		// ! Very questionable workaround since kamek isn't externing SingletonHolder<HeapMemoryWatcher>::sInstance
+		u8* binary = (u8*)ALIGN_32(*(u32 *)((*(u32 *)0x806B6E2C) + 8) + 0x200);
 		u32 binarySize = fileHandle.length;
 		KamekHeader* kamekHeader = (KamekHeader*)binary;
 
 		DVDReadPrio(&fileHandle, binary, binarySize, 0, 2);
 		DVDClose(&fileHandle);
 
-
-		// ------------------------------------------------------------------------------------------------------------
 		// Verify Kamek format & get info from header
-
-		u32 additonal_size = 0UL;
+		u32 additonalSize = 0UL;
 
 		if (kamekHeader->magic1 != 'Kame' || kamekHeader->magic2 != 'k\0') {
-			SyatiError("SYA_ERR\n\nInvalid header\n");
+			BussunError("BSN_ERR\n\nInvalid header\n");
 		}
+
 		if (kamekHeader->version != 1 && kamekHeader->version == 2) {
-			additonal_size = sizeof(KamekExtra);
+			additonalSize = sizeof(KamekExtra);
 		}
 
 		u32 codeSize = kamekHeader->codeSize;
 		u32 bssSize = kamekHeader->bssSize;
 
-
-		// ------------------------------------------------------------------------------------------------------------
 		// Allocate text & BSS memory
-
 		u8* customCodeLinked = new (JKRHeap::sSystemHeap, 32) u8[sCustomCodeSize];
 
-
-		// ------------------------------------------------------------------------------------------------------------
 		// Copy text and clear BSS
-
 		u8* codeStart = customCodeLinked;
 		u8* codeEnd = customCodeLinked + codeSize;
 		u8* bssStart = codeEnd;
 		u8* bssEnd = bssStart + bssSize;
 
-		u8* srcPtr = binary + sizeof(KamekHeader) + additonal_size;
+		u8* srcPtr = binary + sizeof(KamekHeader) + additonalSize;
 
 		while (codeStart < codeEnd) {
 			*codeStart++ = *srcPtr++;
@@ -208,19 +169,13 @@ namespace {
 			*bssStart++ = 0;
 		}
 
-		OSReport("Patch addr = %p, size = %d\n", customCodeLinked, sCustomCodeSize);
+		OSReport("Patch addr: %p, size: %d/%d\n", customCodeLinked, sCustomCodeSize, JKRHeap::sSystemHeap->mSize);
 
-
-		// ------------------------------------------------------------------------------------------------------------
 		// Linking
-
 		u32 linkingSize = binarySize - sizeof(KamekHeader) - codeSize;
-		SyatiLink(customCodeLinked, sCustomCodeSize, srcPtr, linkingSize);
+		BussunLink(customCodeLinked, sCustomCodeSize, srcPtr, linkingSize);
 
-
-		// ------------------------------------------------------------------------------------------------------------
 		// Clear temporary binary
-
 		u8* srcEnd = binary + binarySize;
 
 		while (binary < srcEnd) {
@@ -228,10 +183,13 @@ namespace {
 		}
 	}
 
+#if defined(KOR)
+	kmBranch(0x8039BF44, BussunInit);
+#elif defined(USA)
+	kmBranch(0x8039A9F0, BussunInit);
+#endif
 
-	/*****************************************************************************************************************/
-	/* Runtime linking                                                                                               */
-	/*****************************************************************************************************************/
+	// ----- Runtime linking ----- //
 	static inline u32 resolveAddress(u32 text, u32 address) {
 		return address & 0x80000000 ? address : (text + address);
 	}
@@ -322,7 +280,7 @@ case k##name: input = kHandle##name(input, text, address); break
 		return kHandleRel24(input, text, address);
 	}
 
-	void SyatiLink(u8 *linkedBuffer, u32 linkedSize, u8 *kamekBuffer, u32 kamekSize) {
+	void BussunLink(u8 *linkedBuffer, u32 linkedSize, u8 *kamekBuffer, u32 kamekSize) {
 		u32 text = (u32)linkedBuffer;
 		const u8* input = kamekBuffer;
 		const u8* end = input + kamekSize;
@@ -359,11 +317,11 @@ case k##name: input = kHandle##name(input, text, address); break
 				kDispatchCommand(Branch);
 				kDispatchCommand(BranchLink);
 			default:
-				OSReport("SYATI -- Unknown command: %d\n", cmd);
+				OSReport("BUSSUN -- Unknown command: %d\n", cmd);
 			}
 
 			register u32 cacheAddr = address;
-			asm{
+			asm {
 				dcbst r0, cacheAddr
 				sync
 				icbi r0, cacheAddr
@@ -374,11 +332,8 @@ case k##name: input = kHandle##name(input, text, address); break
 		__isync();
 	}
 
-
-	/*****************************************************************************************************************/
-	/*Helper functions                                                                                               */
-	/*****************************************************************************************************************/
-	void SyatiError(const char *msg) {
+	// ----- Helper functions ----- //
+	void BussunError(const char *msg) {
 		GXColor fg = {0xFF, 0xFF, 0xFF, 0xFF};
 		GXColor bg = {0};
 		OSFatal(fg, bg, msg);
