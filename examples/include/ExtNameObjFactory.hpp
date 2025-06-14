@@ -1,6 +1,7 @@
 #pragma once
 
 #include <revolution.h>
+#include <Game/NameObj/NameObj.hpp>
 
 class NameObjFactory {
 public:
