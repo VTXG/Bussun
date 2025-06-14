@@ -129,7 +129,7 @@ namespace {
 		// This is... questionable. Allocating memory on a heap and freeing it later on doesn't seem to work properly
 		// on console. However, GameHeapNapa gets destroyed very often, so this is actually very reliable.
 		// ! Very questionable workaround since kamek isn't externing SingletonHolder<HeapMemoryWatcher>::sInstance
-		u8* binary = (u8*)ALIGN_32(*(u32 *)((*(u32 *)0x806B6E2C) + 8) + 0x200);
+		u8* binary = (u8*)ALIGN_32(*(u32 *)((*(u32 *)HEAP_WATCHER_INSTANCE) + 8) + 0x200);
 		u32 binarySize = fileHandle.length;
 		KamekHeader* kamekHeader = (KamekHeader*)binary;
 

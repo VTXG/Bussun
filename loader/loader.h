@@ -6,12 +6,14 @@
 #define KAMEK_BINARY_NAME "/CustomCode/CustomCode_PAL.bin"
 #elif defined(USA)
 #define KAMEK_BINARY_NAME "/CustomCode/CustomCode_USA.bin"
+#define HEAP_WATCHER_INSTANCE 0x806A245C
 #elif defined(JPN)
 #define KAMEK_BINARY_NAME "/CustomCode/CustomCode_JPN.bin"
 #elif defined(TWN)
 #define KAMEK_BINARY_NAME "/CustomCode/CustomCode_TWN.bin"
 #elif defined(KOR)
 #define KAMEK_BINARY_NAME "/CustomCode/CustomCode_KOR.bin"
+#define HEAP_WATCHER_INSTANCE 0x806B6E2C
 #endif
 
 #define ALIGN_32(a) ((a + 31) & ~31)
