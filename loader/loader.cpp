@@ -3,7 +3,6 @@
 #include <revolution/dvd.h>
 #include <revolution/os.h>
 #include <Game/System/HeapMemoryWatcher.hpp>
-#include <Game/SingletonHolder.hpp>
 
 /*
 * ORIGINAL COMMENT:
@@ -17,19 +16,6 @@
 */
 
 namespace {
-	// ----- Enable crash debugger ----- //
-#if defined(KOR)
-	kmWrite32(0x8039BF80, 0x60000000);
-	kmWrite32(0x8039C044, 0x60000000);
-	kmWrite32(0x804A626C, 0x60000000);
-	kmWrite32(0x804A656C, 0x60000000);
-#elif defined(USA)
-	kmWrite32(0x8039AA2C, 0x60000000);
-	kmWrite32(0x8039AAF0, 0x60000000);
-	kmWrite32(0x804A402C, 0x60000000);
-	kmWrite32(0x804A432C, 0x60000000);
-#endif
-
 	// ----- Get size of CustomCode and expand SystemHeap if necessary ----- //
 	static u32 sCustomCodeSize;
 
@@ -51,7 +37,7 @@ namespace {
 		}
 
 		u8 tempBuffer[ALIGN_32(sizeof(KamekHeader)) * 2];
-		KamekHeader *pHeader = (KamekHeader*)ALIGN_32((u32)tempBuffer);
+		KamekHeader* pHeader = (KamekHeader*)ALIGN_32((u32)tempBuffer);
 
 		DVDReadPrio(&fileHandle, pHeader, 32, 0, 2);
 		DVDClose(&fileHandle);
@@ -59,16 +45,10 @@ namespace {
 		sCustomCodeSize = ALIGN_32(pHeader->codeSize + pHeader->bssSize);
 	}
 
-	void getCustomCodeSizeAndCreateHeaps(HeapMemoryWatcher *heapWatcher) {
+	void getCustomCodeSizeAndCreateHeaps(HeapMemoryWatcher* pHeapWatcher) {
 		initCustomCodeSize();
-		heapWatcher->createHeaps();
+		pHeapWatcher->createHeaps();
 	}
-
-#if defined(KOR)
-	kmCall(0x803A04A0, getCustomCodeSizeAndCreateHeaps);
-#elif defined(USA)
-	kmCall(0x8039EF34, getCustomCodeSizeAndCreateHeaps);
-#endif
 
 /*
 	// ----- Create SystemHeap with adjusted size ----- //
@@ -128,8 +108,7 @@ namespace {
 		// Read temporary binary file and close handle
 		// This is... questionable. Allocating memory on a heap and freeing it later on doesn't seem to work properly
 		// on console. However, GameHeapNapa gets destroyed very often, so this is actually very reliable.
-		// ! Very questionable workaround since kamek isn't externing SingletonHolder<HeapMemoryWatcher>::sInstance
-		u8* binary = (u8*)ALIGN_32(*(u32 *)((*(u32 *)HEAP_WATCHER_INSTANCE) + 8) + 0x200);
+		u8* binary = (u8*)ALIGN_32((u32)SingletonHolder<HeapMemoryWatcher>::sInstance->mGameHeapNapa + 0x200);
 		u32 binarySize = fileHandle.length;
 		KamekHeader* kamekHeader = (KamekHeader*)binary;
 
@@ -182,12 +161,6 @@ namespace {
 			*binary++ = 0;
 		}
 	}
-
-#if defined(KOR)
-	kmBranch(0x8039BF44, BussunInit);
-#elif defined(USA)
-	kmBranch(0x8039A9F0, BussunInit);
-#endif
 
 	// ----- Runtime linking ----- //
 	static inline u32 resolveAddress(u32 text, u32 address) {
@@ -339,3 +312,19 @@ case k##name: input = kHandle##name(input, text, address); break
 		OSFatal(fg, bg, msg);
 	}
 }
+
+// ----- Hooks ----- //
+// Enable crash debugger
+extern kmSymbol handleException__19GameSystemExceptionFUsP9OSContextUlUl;
+kmWrite32(&handleException__19GameSystemExceptionFUsP9OSContextUlUl + 0x38, 0x60000000);
+kmWrite32(&handleException__19GameSystemExceptionFUsP9OSContextUlUl + 0xFC, 0x60000000);
+kmWrite32((u8*)OSPanic + 0x108, 0x60000000);
+kmWrite32((u8*)__OSUnhandledException + 0x54, 0x60000000);
+
+// Custom code size handling
+extern kmSymbol __ct__17HeapMemoryWatcherFv;
+kmCall(&__ct__17HeapMemoryWatcherFv + 0x50, getCustomCodeSizeAndCreateHeaps);
+
+// Custom code loading
+extern kmSymbol init__19GameSystemExceptionFv;
+kmBranch(&init__19GameSystemExceptionFv + 0xB8, BussunInit);

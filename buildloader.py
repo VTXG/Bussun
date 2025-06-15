@@ -108,7 +108,7 @@ if __name__ == '__main__':
         print("Did not specify a (valid) target region, building all targets!")
         prepare_bin()
         for region in REGIONS:
-            build(region, outputPath or "loader/", buildFullXML)
+            build(region, outputPath or "bin/", buildFullXML)
     else:
         prepare_bin()
-        build(region, outputPath or "loader/", buildFullXML)
+        build(region, outputPath or "bin/", buildFullXML)

@@ -92,7 +92,7 @@ print("Linking...")
 object_files = " ".join([task[1] for task in tasks])
 asm_obj_files = " ".join([a_task[1] for a_task in asm_tasks])
 
-kamek_cmd = f"{KAMEK} {object_files} {asm_obj_files} -externals=symbols/{region}.txt -output-kamek=bin/CustomCode_{region}.bin"
+kamek_cmd = f"{KAMEK} {object_files} {asm_obj_files} -externals=symbols/{region}.txt -output-kamek=bin/CustomCode_{region}.bin -output-map=bin/CustomCode_{region}.map"
 
 if subprocess.call(kamek_cmd, shell=True) != 0:
     err("Linking failed.")
