@@ -1,0 +1,18 @@
+#pragma once
+
+class Koopa;
+class HitSensor;
+
+class KoopaSensorCtrl {
+public:
+    /// @brief Creates a new `KoopaSensorCtrl`.
+    /// @param pHost The pointer to the owning Bowser actor instance.
+    KoopaSensorCtrl(Koopa* pHost);
+
+    void update(HitSensor* pSensor);
+    void initSensor();
+
+public:
+    /// @brief The pointer to the owning Bowser actor instance.
+    /* 0x0 */ Koopa* mHost;
+};
