@@ -11,7 +11,8 @@ public:
     void erase(int, int, int, int);
     void drawChar(int, int, int);
     void changeFrameBuffer(void*, u16, u16);
-    /* -------- */ void print(u16, u16, char const*, ...);
+    /* -------- */
+    void print(u16, u16, char const*, ...);
     void printSub(u16, u16, char const*, va_list, bool);
     void drawString(u16, u16, char*);
     void drawString_f(u16, u16, char const*, ...);

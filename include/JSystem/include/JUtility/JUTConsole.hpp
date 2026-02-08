@@ -11,7 +11,7 @@ class JUTFont;
 
 class JUTConsole : public JKRDisposer {
 public:
-    void print_f(const char*, ...);
+    static void print_f(const char*, ...);
 
     enum EConsoleType {
         CONSOLE_TYPE_0 = 0,

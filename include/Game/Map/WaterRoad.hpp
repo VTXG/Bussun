@@ -4,9 +4,6 @@
 #include "JSystem/JGeometry.hpp"
 #include <revolution.h>
 
-const Mtx qMtx2_1 = {};
-const Mtx qMtx2_2 = {};
-
 class WaterRoad : public LiveActor {
 public:
     WaterRoad(const char*);
@@ -38,6 +35,6 @@ public:
     TVec3f* _10;
     TVec3s* _14;
     f32* _18;
-    u32 mDLLength;      // 0x1C
-    const void* mList;  // 0x20
+    u32 mDispListLength;      // 0x1C
+    u8* mDispList;  // 0x20
 };

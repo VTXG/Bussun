@@ -110,38 +110,23 @@ extern "C" {
  */
 
 // Two unused eye types?
-static const u8 RFLi_EYE_ROT_OFFSET[RFLi_MAX_EYE_TYPE + 2 + 1] = {
-    29, 28, 28, 28, 29, 28, 28, 28, 29, 28, 28, 28, 28, 29, 29, 28, 28,
-    28, 29, 29, 28, 29, 28, 29, 29, 28, 29, 28, 28, 29, 28, 28, 28, 29,
-    29, 29, 28, 28, 29, 29, 29, 28, 28, 29, 29, 29, 29, 29, 28, 28};
+extern const u8 RFLi_EYE_ROT_OFFSET[];
 
-static const u8 RFLi_EYEBROW_ROT_OFFSET[RFLi_MAX_EYEBROW_TYPE + 1] = {
-    26, 26, 27, 25, 26, 25, 26, 25, 28, 25, 26, 24,
-    27, 27, 26, 26, 25, 25, 26, 26, 27, 26, 25, 27};
+extern const u8 RFLi_EYEBROW_ROT_OFFSET[];
 
 /**
  * Colors for TEV
  */
-static const GXColor RFLi_MOLE_COLOR0 = {18, 15, 15, 255};
+extern const GXColor RFLi_MOLE_COLOR0;
 
-static const GXColor RFLi_EYE_COLOR1[RFLi_MAX_EYE_COLOR + 1] = {
-    {0, 0, 0, 255},      {124, 128, 128, 255}, {112, 80, 64, 255},
-    {112, 110, 64, 255}, {88, 104, 184, 255},  {72, 128, 104, 255}};
+extern const GXColor RFLi_EYE_COLOR1[];
 
-static const GXColor RFLi_EYEBROW_COLOR0[RFLi_MAX_EYEBROW_COLOR + 1] = {
-    {30, 26, 24, 255},  {56, 32, 21, 255},    {85, 38, 23, 255},
-    {112, 64, 36, 255}, {114, 114, 120, 255}, {73, 54, 26, 255},
-    {122, 89, 40, 255}, {193, 159, 100, 255}};
+extern const GXColor RFLi_EYEBROW_COLOR0[];
 
-static const GXColor RFLi_MOUTH_COLOR0[RFLi_MAX_MOUTH_COLOR + 1] = {
-    {190, 78, 38, 255}, {216, 48, 40, 255}, {207, 68, 71, 255}};
-static const GXColor RFLi_MOUTH_COLOR1[RFLi_MAX_MOUTH_COLOR + 1] = {
-    {113, 42, 4, 255}, {120, 21, 16, 255}, {126, 37, 40, 255}};
+extern const GXColor RFLi_MOUTH_COLOR0[];
+extern const GXColor RFLi_MOUTH_COLOR1[];
 
-static const GXColor RFLi_BEARD_COLOR0[RFLi_MAX_BEARD_COLOR + 1] = {
-    {30, 26, 24, 255},  {56, 32, 21, 255},    {85, 38, 23, 255},
-    {112, 64, 36, 255}, {114, 114, 120, 255}, {73, 54, 26, 255},
-    {122, 89, 40, 255}, {193, 159, 100, 255}};
+extern const GXColor RFLi_BEARD_COLOR0[];
 
 #ifdef __cplusplus
 }
