@@ -36,9 +36,9 @@ public:
     u8* getVFilter() const { return mRenderObj->vfilter; }
     OSMessageQueue* getMessageQueue() { return &mMessageQueue; }
 
-    static JUTVideo* getManager() { return sManager; }
-    static OSTick getVideoInterval() { return sVideoInterval; }
-    static OSTick getVideoLastTick() { return sVideoLastTick; }
+    static inline JUTVideo* getManager() { return sManager; }
+    static inline OSTick getVideoInterval() { return sVideoInterval; }
+    static inline OSTick getVideoLastTick() { return sVideoLastTick; }
 
     GXRenderModeObj* getRenderMode() const { return mRenderObj; }
 

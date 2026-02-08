@@ -31,7 +31,7 @@ public:
     static s32 getCometNameId();
     static MiniatureGalaxy* getPointingMiniatureGalaxy();
 
-    inline static MiniatureGalaxyHolder* getMiniGalaxyHolder() {  // No proves, no doubts
+    static inline MiniatureGalaxyHolder* getMiniGalaxyHolder() {  // No proves, no doubts
         SceneObjHolder* mHolder = MR::getSceneObjHolder();
         MiniatureGalaxyHolder* mMiniatureGalaxyHolder = (MiniatureGalaxyHolder*)mHolder->getObj(115);
         return mMiniatureGalaxyHolder;

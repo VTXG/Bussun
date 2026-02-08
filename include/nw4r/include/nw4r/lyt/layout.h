@@ -45,9 +45,9 @@ namespace nw4r {
         public:
             Layout();
 
-            static void* AllocMemory(u32 size) { return MEMAllocFromAllocator(mspAllocator, size); }
+            static inline void* AllocMemory(u32 size) { return MEMAllocFromAllocator(mspAllocator, size); }
 
-            static void FreeMemory(void* mem) { MEMFreeToAllocator(mspAllocator, mem); }
+            static inline void FreeMemory(void* mem) { MEMFreeToAllocator(mspAllocator, mem); }
 
             virtual ~Layout();
             virtual bool Build(const void*, ResourceAccessor*);

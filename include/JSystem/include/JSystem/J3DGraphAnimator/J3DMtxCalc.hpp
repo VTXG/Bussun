@@ -20,9 +20,9 @@ public:
     virtual void init(const Vec& param_0, const Mtx&) = 0;
     virtual void calc() = 0;
 
-    static J3DMtxBuffer* getMtxBuffer() { return mMtxBuffer; }
-    static J3DJoint* getJoint() { return mJoint; }
-    static void setJoint(J3DJoint* joint) { mJoint = joint; }
+    static inline J3DMtxBuffer* getMtxBuffer() { return mMtxBuffer; }
+    static inline J3DJoint* getJoint() { return mJoint; }
+    static inline void setJoint(J3DJoint* joint) { mJoint = joint; }
 
     static J3DMtxBuffer* mMtxBuffer;
     static J3DJoint* mJoint;

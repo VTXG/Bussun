@@ -79,7 +79,7 @@ public:
 
     static void destroy(JKRHeap*);
 
-    static JKRHeap* getCurrentHeap() { return sCurrentHeap; }
+    static inline JKRHeap* getCurrentHeap() { return sCurrentHeap; }
 
     static void setAltAramStartAdr(u32);
     static u32 getAltAramStartAdr();

@@ -80,10 +80,10 @@ public:
     static bool sLODFlag;
     static u32 sTexMtxLoadType;
 
-    static void setCurrentPipeline(u32 pipeline) { sCurrentPipeline = pipeline; }
+    static inline void setCurrentPipeline(u32 pipeline) { sCurrentPipeline = pipeline; }
 
-    static void setLODFlag(bool flag) { sLODFlag = flag; }
-    static u32 getLODFlag() { return sLODFlag; }
+    static inline void setLODFlag(bool flag) { sLODFlag = flag; }
+    static inline u32 getLODFlag() { return sLODFlag; }
     static void resetMtxLoadCache();
 
 public:
@@ -153,7 +153,7 @@ public:
     Vec* getMin() { return &mMin; }
     Vec* getMax() { return &mMax; }
 
-    static void resetVcdVatCache() { sOldVcdVatCmd = NULL; }
+    static inline void resetVcdVatCache() { sOldVcdVatCmd = NULL; }
 
     static void* sOldVcdVatCmd;
     static bool sEnvelopeFlag;

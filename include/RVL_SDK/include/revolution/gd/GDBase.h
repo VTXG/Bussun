@@ -26,47 +26,17 @@ void GDPadCurr32();
 
 void GDOverflowed();
 
-static void GDOverflowCheck(u32 size) {
-    if (__GDCurrentDL->ptr + size > __GDCurrentDL->top) {
-        GDOverflowed();
-    }
-}
+void GDOverflowCheck(u32 size);
 
-static void __GDWrite(u8 data) {
-    *__GDCurrentDL->ptr++ = data;
-}
+void __GDWrite(u8 data);
 
-static void GDWrite_u8(u8 data) {
-    GDOverflowCheck(1);
-    __GDWrite(data);
-}
+void GDWrite_u8(u8 data);
 
-static void GDWrite_u16(u16 data) {
-    GDOverflowCheck(2);
-    __GDWrite((u8)(data >> 8));
-    __GDWrite((u8)(data & 0xff));
-}
+void GDWrite_u16(u16 data);
 
-static void GDWrite_u32(u32 data) {
-    GDOverflowCheck(4);
-    __GDWrite((u8)((data >> 24) & 0xff));
-    __GDWrite((u8)((data >> 16) & 0xff));
-    __GDWrite((u8)((data >> 8) & 0xff));
-    __GDWrite((u8)((data >> 0) & 0xff));
-}
+void GDWrite_u32(u32 data);
 
-static void GDWrite_f32(f32 data) {
-    typedef union {
-        f32 f;
-        u32 u;
-    } _FloatInt;
-
-    _FloatInt fid;
-
-    fid.f = data;
-
-    GDWrite_u32(fid.u);
-}
+void GDWrite_f32(f32 data);
 
 static inline void GDWriteBPCmd(u32 regval) {
     GDWrite_u8(0x61);
@@ -94,13 +64,9 @@ static inline void GDWriteXFCmdHdr(u16 addr, u8 len) {
 
 void GDOverflowed(void);
 
-static void GDPosition3f32(f32 x, f32 y, f32 z) {
-    GDWrite_f32(x);
-    GDWrite_f32(y);
-    GDWrite_f32(z);
-}
+void GDPosition3f32(f32 x, f32 y, f32 z);
 
-inline static void GDSetCurrent(GDLObj* dl) {
+static inline void GDSetCurrent(GDLObj* dl) {
     __GDCurrentDL = dl;
 }
 

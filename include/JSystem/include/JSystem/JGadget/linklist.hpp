@@ -146,9 +146,9 @@ namespace JGadget {
                 .curr;
         }
 
-        static TLinkListNode* Element_toNode(T* element) NO_INLINE { return (TLinkListNode*)((u8*)element - NODE_OFFSET); }
+        static inline TLinkListNode* Element_toNode(T* element) NO_INLINE { return (TLinkListNode*)((u8*)element - NODE_OFFSET); }
 
-        static T* Element_toValue(TLinkListNode* element) NO_INLINE { return (T*)((u8*)element + NODE_OFFSET); }
+        static inline T* Element_toValue(TLinkListNode* element) NO_INLINE { return (T*)((u8*)element + NODE_OFFSET); }
 
         void Remove(T* element) NO_INLINE { TNodeLinkList::Remove(Element_toNode(element)); }
     };

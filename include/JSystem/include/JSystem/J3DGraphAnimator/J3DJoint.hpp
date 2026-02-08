@@ -91,7 +91,7 @@ public:
 };
 
 struct J3DMtxCalcJ3DSysInitSoftimage {
-    static void init(const Vec& param_0, const Mtx& param_1) {
+    static inline void init(const Vec& param_0, const Mtx& param_1) {
         J3DSys::mCurrentS = param_0;
         PSMTXCopy(param_1, J3DSys::mCurrentMtx);
     }

@@ -22,10 +22,10 @@ namespace JMath {
 
     template <>
     struct TAngleConstant_< f32 > {
-        static f32 RADIAN_DEG090() { return 1.5707964f; }
-        static f32 RADIAN_DEG180() { return 3.1415927f; }
-        static f32 RADIAN_DEG360() { return 6.2831855f; }
-        static f32 RADIAN_TO_DEGREE_FACTOR() { return 180.0f / RADIAN_DEG180(); }
+        static inline f32 RADIAN_DEG090() { return 1.5707964f; }
+        static inline f32 RADIAN_DEG180() { return 3.1415927f; }
+        static inline f32 RADIAN_DEG360() { return 6.2831855f; }
+        static inline f32 RADIAN_TO_DEGREE_FACTOR() { return 180.0f / RADIAN_DEG180(); }
     };
 
     template < int Bits, typename T >

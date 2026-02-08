@@ -76,15 +76,15 @@ BOOL __DBEXIWriteReg(u32 cmd, const void* mem, s32 size);
 BOOL __DBEXIReadRam(u32 cmd, void* mem, s32 size);
 BOOL __DBEXIWriteRam(u32 cmd, const void* mem, s32 size);
 
-static u32 ODEMUGenMailData(u32 ofs, u32 size) {
+static inline u32 ODEMUGenMailData(u32 ofs, u32 size) {
     return (ofs & 0xff) << 0x10 | 0x1f000000 | size & 0x1fff;
 }
 
-static u32 ODEMUGetPage(u32 mail) {
+static inline u32 ODEMUGetPage(u32 mail) {
     return (mail & 0xFF0000) >> 16;
 }
 
-static u32 ODEMUGetPc2NngcOffset(u32 mail) {
+static inline u32 ODEMUGetPc2NngcOffset(u32 mail) {
     if (!(ODEMUGetPage(mail) & 0x1)) {
         return 0;
     }
@@ -92,31 +92,31 @@ static u32 ODEMUGetPc2NngcOffset(u32 mail) {
     return 0x800;
 }
 
-static BOOL ODEMUIsValidMail(u32 mail) {
+static inline BOOL ODEMUIsValidMail(u32 mail) {
     return (mail & 0x1F000000) == 0x1F000000;
 }
 
-static u32 ODEMUGetSize(u32 mail) {
+static inline u32 ODEMUGetSize(u32 mail) {
     return mail & 0x1FFF;
 }
 
-static BOOL __DBReadMailbox(u32* mailOut) {
+static inline BOOL __DBReadMailbox(u32* mailOut) {
     return __DBEXIReadReg(0x34000200, mailOut, sizeof(*mailOut));
 }
 
-static BOOL __DBRead(u32 ofs, void* dest, u32 size) {
+static inline BOOL __DBRead(u32 ofs, void* dest, u32 size) {
     return __DBEXIReadRam(((ofs + 0xD10000) * 0x40) & 0x3FFFFF00, dest, size);
 }
 
-static BOOL __DBWriteMailbox(u32 mail) {
+static inline BOOL __DBWriteMailbox(u32 mail) {
     return __DBEXIWriteReg(0xB4000100, &mail, sizeof(mail));
 }
 
-static BOOL __DBWrite(u32 ofs, const void* src, u32 size) {
+static inline BOOL __DBWrite(u32 ofs, const void* src, u32 size) {
     return __DBEXIWriteRam((((ofs + 0xD10000) * 0x40) & 0x3FFFFF00) | 0x80000000, src, size);
 }
 
-static u32 __EXISwap32(u32 val) {
+static inline u32 __EXISwap32(u32 val) {
     return val >> 24 & 0x000000FF | val >> 8 & 0x0000FF00 | val << 8 & 0x00FF0000 | val << 24 & 0xFF000000;
 }
 

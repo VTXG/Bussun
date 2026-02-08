@@ -82,8 +82,8 @@ public:
     static void createConsole(void*, u32);
     static void waitTime(s32);
 
-    static JUTException* getManager() { return sErrorManager; }
-    static JUTConsole* getConsole() NO_INLINE { return sConsole; }
+    static inline JUTException* getManager() { return sErrorManager; }
+    static inline JUTConsole* getConsole() NO_INLINE { return sConsole; }
 
     JUTExternalFB* getFrameMemory() const { return mFrameMemory; }
 
@@ -93,8 +93,8 @@ public:
         mGamePadPort = JUTGamePad::Port_Unknown;
     }
 
-    static void setMapFile(const char* map) { appendMapFile(map); }
-    static void panic(const char* file, int line, const char* msg) { panic_f(file, line, "%s", msg); }
+    static inline void setMapFile(const char* map) { appendMapFile(map); }
+    static inline void panic(const char* file, int line, const char* msg) { panic_f(file, line, "%s", msg); }
 
     static OSMessageQueue sMessageQueue;
     static const char* sCpuExpName[17];

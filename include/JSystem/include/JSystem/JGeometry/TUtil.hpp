@@ -10,7 +10,7 @@ namespace JGeometry {
     template < typename T >
     class TUtil {
     public:
-        static int epsilonEquals(T a1, T a2, T a3) {
+        static inline int epsilonEquals(T a1, T a2, T a3) {
             int ret = 0;
 
             a1 -= a2;
@@ -22,7 +22,7 @@ namespace JGeometry {
             return ret;
         }
 
-        static T sqrt(T val) NO_INLINE {
+        static inline T sqrt(T val) NO_INLINE {
             if (val <= 0.0f) {
                 return 0.0f;
             }
@@ -31,7 +31,7 @@ namespace JGeometry {
             return (val * (0.5f * outVal * (3.0f - (val * (outVal * outVal)))));
         }
 
-        static f32 asin(f32 val) NO_INLINE {
+        static inline f32 asin(f32 val) NO_INLINE {
             if (val >= 1.0f) {
                 return 1.5707964f;
             }
@@ -47,9 +47,9 @@ namespace JGeometry {
             return flt_80630CA0[(u32)(1023.5f * val)];
         }
 
-        static f32 PI() NO_INLINE { return 3.1415927f; }
+        static inline f32 PI() NO_INLINE { return 3.1415927f; }
 
-        static T clamp(T val, T min, T max) NO_INLINE {
+        static inline T clamp(T val, T min, T max) NO_INLINE {
             if (val < min) {
                 return min;
             }

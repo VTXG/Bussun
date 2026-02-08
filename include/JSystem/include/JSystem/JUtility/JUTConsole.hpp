@@ -71,7 +71,7 @@ public:
     JUTConsole* mActiveConsole;  // 0xC
     JUTConsole* mDirectConsole;  // 0x10
 
-    static JUTConsoleManager* const getManager() { return sManager; }
+    static inline JUTConsoleManager* const getManager() { return sManager; }
 
     static JUTConsoleManager* sManager;
 };

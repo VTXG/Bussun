@@ -204,9 +204,9 @@ namespace nw4r {
 
             Iterator Erase(pointer p) { return Iterator(Base::Erase(GetNodeFromPointer(p))); }
 
-            static pointer GetPointerFromNode(Node* p) { return reinterpret_cast< pointer >(reinterpret_cast< IntPtr >(p) - TNOffset); }
+            static inline pointer GetPointerFromNode(Node* p) { return reinterpret_cast< pointer >(reinterpret_cast< IntPtr >(p) - TNOffset); }
 
-            static Node* GetNodeFromPointer(pointer p) { return reinterpret_cast< Node* >(reinterpret_cast< IntPtr >(p) + TNOffset); }
+            static inline Node* GetNodeFromPointer(pointer p) { return reinterpret_cast< Node* >(reinterpret_cast< IntPtr >(p) + TNOffset); }
         };
     };  // namespace ut
 };  // namespace nw4r

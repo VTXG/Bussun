@@ -23,7 +23,7 @@ public:
     void flush();
     void drawString(int, int, int, u8 const*);
 
-    static JUTDbPrint* getManager() { return sDebugPrint; }
+    static inline JUTDbPrint* getManager() { return sDebugPrint; }
 
     void setVisible(bool visible) { mVisible = visible; }
     JUTFont* getFont() const { return mFont; }
