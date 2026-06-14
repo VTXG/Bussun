@@ -39,3 +39,4 @@ Kamek
 *.pyc
 *.bin
 .*.swp
+.usr

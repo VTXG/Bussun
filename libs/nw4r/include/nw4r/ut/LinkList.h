@@ -20,7 +20,7 @@ namespace nw4r {
             };
         };  // namespace detail
 
-        class LinkListNode : private NonCopyable {
+        class LinkListNode : public NonCopyable {
         public:
             typedef LinkListNode Self;
 
@@ -40,7 +40,7 @@ namespace nw4r {
         };
 
         namespace detail {
-            class LinkListImpl : private NonCopyable {
+            class LinkListImpl : public NonCopyable {
             public:
                 typedef LinkListImpl Self;
                 typedef unsigned long size_type;
@@ -127,7 +127,7 @@ namespace nw4r {
         };  // namespace detail
 
         template < typename T, PtrDiff TNOffset >
-        class LinkList : private detail::LinkListImpl {
+        class LinkList : public detail::LinkListImpl {
         public:
             typedef detail::LinkListImpl Base;
             typedef LinkList Self;

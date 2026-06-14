@@ -1,8 +1,7 @@
 #pragma once
 
-#include "Game/GameAudio/AudTalkSoundData.hpp"
-
-class JAISoundID;
+#include <JSystem/JAudio2/JAISound.hpp>
+#include <revolution/types.h>
 
 class AudSoundNameConverter {
 public:

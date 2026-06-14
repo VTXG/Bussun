@@ -5,9 +5,9 @@
 extern "C" {
 #endif
 
-inline long double fabsl(long double x) {
-    return __fabs((double)x);
-}
+// inline long double fabsl(long double x) {
+//     return __fabs((double)x);
+// }
 
 double acos(double);
 double asin(double);

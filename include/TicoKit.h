@@ -1,6 +1,7 @@
 #pragma once
 
 #include "revolution.h"
+#include "revolution/ipc.h"
 #include "cstdio"
 #include "cstdlib"
 #include "mem.h"

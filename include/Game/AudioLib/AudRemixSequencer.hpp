@@ -1,5 +1,5 @@
 #pragma once
-#include "Game/GameAudio/AudTalkSoundData.hpp"
+
 #include <revolution/types.h>
 
 struct RemixNoteTrackData {
