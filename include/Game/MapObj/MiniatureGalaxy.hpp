@@ -59,7 +59,7 @@ public:
     /* 0x104 */ ProjmapEffectMtxSetter* mProjmapEffectMtxSetter;
     /* 0x108 */ TVec3f _108;
     /* 0x114 */ const char* mMiniatureName;
-    /* 0x118 */ const char* mName;
+    /* 0x118 */ const char* mGalaxyName;
     /* 0x11C */ s32 mCanZoomIn;
     /* 0x120 */ s32 mZoomLevel;
     /* 0x124 */ J3DTexMtx _124;
