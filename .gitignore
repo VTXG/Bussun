@@ -31,8 +31,9 @@
 *.out
 *.app
 
+deps/CodeWarrior
+deps/Kamek
 Compilers
-Kamek
 .vscode
 *.xml
 *.ini
